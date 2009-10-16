@@ -8,7 +8,7 @@ global $WIKISPACES_BASE;
 $admin_name = $USERNAME;
 $admin_password = $PASSWORD;
 
-$NRA_FILE = "/wwws/data/ccnmtl/access/nra/nra";
+$NRA_FILE = "/wwws/data/ccnmtl/access/nra/nra-unified";
 
 $COURSE_PREFIX = "CUcourse_";
 $INSTRUCTOR_PREFIX = "CUinstr_";
@@ -214,8 +214,11 @@ function getNRACoursesByUni() {
 	}
 
 	$nra_classes = array();
+
+	// rows in nra-unified look like this:
+	// jb2410,TA,ENGLG8401_001_2009_3
 	foreach ($nra_array as $nra_row) {
-		$nra_classes[] = $nra_row[1];	
+		$nra_classes[] = $nra_row[2];	
 	}
 	return $nra_classes;
 }		

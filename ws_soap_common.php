@@ -47,6 +47,8 @@ function getMyCourses() {
 	$affils = explode(" ", $USER_AFFILIATIONS);
 	$my_courses = array_filter($affils, isCourse);
 	$my_courses = array_filter($my_courses, isCurrent);
+	// debugging TC insanity
+	// $my_courses[] = "CUcourse_A&HY5010_002_2009_1";
 	$my_courses = array_map(affil2space, $my_courses);
 
 	// also, append the NRA file
@@ -146,6 +148,11 @@ function affil2space($affil) {
 // e.g. - COLLF2010_001_2006_1 -> collf2010_001_2006_1
 function coursekey2space($course) {
 	$ws_safe = str_replace("_", "-", $course);
+
+	// special case to handle TC's '&' in the course string - e.g. A&H
+	// we replace the '&' with a '6', just like edblogs does.
+	$ws_safe = str_replace("&", "6", $course);	
+
 	return strtolower($ws_safe);
 }
 

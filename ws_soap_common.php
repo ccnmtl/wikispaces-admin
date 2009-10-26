@@ -45,6 +45,16 @@ function getMyCourses() {
 	// the courses from pamacea's affiliations
 	$USER_AFFILIATIONS = $_SERVER['USER_AFFILIATIONS']; 
 	$affils = explode(" ", $USER_AFFILIATIONS);
+
+	// just for debugging
+	// debugging - test that known course affil are properly transformed
+	$uni = $_SERVER['REMOTE_USER'];
+
+	if ($uni == 'jb2410' || $uni == 'dbeeby') { 
+	   $affils[] = 'CUcourse_MRKTB8619_001_2009_3';
+	   $affils[] = 'CUcourse_A&HY5010_002_2009_1';
+	}
+
 	$my_courses = array_filter($affils, isCourse);
 	$my_courses = array_filter($my_courses, isCurrent);
 	// debugging TC insanity
@@ -59,8 +69,6 @@ function getMyCourses() {
 
         usort($my_courses, "cmp_semester");
 
-	// just for debugging
-	$uni = $_SERVER['REMOTE_USER'];
 	if ($uni == 'jb2410' || $uni == 'dbeeby') { 
 	   $my_courses[] = 'www';
 	   $my_courses[] = 'ccnmtl';
@@ -147,12 +155,11 @@ function affil2space($affil) {
 // returns the cannonical version of a course name given the nra coursekey format
 // e.g. - COLLF2010_001_2006_1 -> collf2010_001_2006_1
 function coursekey2space($course) {
-	$ws_safe = str_replace("_", "-", $course);
+	$tmp = str_replace("_", "-", $course);
 
 	// special case to handle TC's '&' in the course string - e.g. A&H
 	// we replace the '&' with a '6', just like edblogs does.
-	$ws_safe = str_replace("&", "6", $course);	
-
+	$ws_safe = str_replace("&", "6", $tmp);	
 	return strtolower($ws_safe);
 }
 

@@ -8,7 +8,7 @@ global $WIKISPACES_BASE;
 $admin_name = $USERNAME;
 $admin_password = $PASSWORD;
 
-$NRA_FILE = "/wwws/data/ccnmtl/access/nra/nra-unified";
+$NRA_FILE = "/wwws/data/ccnmtl/access/nra/nra";
 
 $COURSE_PREFIX = "CUcourse_";
 $INSTRUCTOR_PREFIX = "CUinstr_";
@@ -98,6 +98,7 @@ function getMyInstructorCourses() {
 		$my_instr_courses[] = 'ccnmtl';	
 		$my_instr_courses[] = 'jonah-playground3';
 		$my_instr_courses[] = 'jonah-playground4';
+		$my_instr_courses[] = 'jonah-playground7';
 }
 	return $my_instr_courses;	
 }

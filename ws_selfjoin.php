@@ -35,23 +35,24 @@ if (!in_array($space_name, $my_courses)) {
 $session = $siteApi->login($admin_name, $admin_password);
 
 
-$space = $spaceApi->getSpace($session, $space_name);
-
-if (!$space->id) {
+try {
+    $space = $spaceApi->getSpace($session, $space_name);
+} catch (Exception $e) {
 	print '{ "results" : "The wiki you have chosen has not been activated by your instructor. If you have problems accessing an active wiki, please contact ' . $CONTACT_EMAIL . ' for more assistance.",
 	         "joined" : "false" }';
 	exit;
 }
 
 // check if the user exists
-$user = $userApi->getUser($session, $REMOTE_USER);
-$new = false;
-
-// they don't exist - create a new user w/in wikispaces
-if (!$user->id) {
-	$new = true;
-	$user = $userApi->createUser($session, $REMOTE_USER, $NEW_USER_PASSWORD, $USER_EMAIL);
+try { 
+    $user = $userApi->getUser($session, $REMOTE_USER);
+    $new  = false;
+} catch (Exception $e) {
+  // they don't exist - create a new user w/in wikispaces
+  $new = true;
+  $user = $userApi->createUser($session, $REMOTE_USER, $NEW_USER_PASSWORD, $USER_EMAIL);
 }
+
 
 // here, we add the user to the space - 
 // first check if they are already a member/org

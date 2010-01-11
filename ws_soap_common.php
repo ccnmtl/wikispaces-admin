@@ -13,26 +13,11 @@ $NRA_FILE = "/wwws/data/ccnmtl/access/nra/nra";
 $COURSE_PREFIX = "CUcourse_";
 $INSTRUCTOR_PREFIX = "CUinstr_";
 
-// Pear SOAP is installed on main CUIT /wwws server
-$usePearSoap = true;	
-
-if ($usePearSoap) {
-  require_once('SOAP/WSDL.php');
-  $WSDL = new SOAP_WSDL($WIKISPACES_BASE . '/site/api/?wsdl');
-  $siteApi = $WSDL->getProxy();
-  $WSDL = new SOAP_WSDL($WIKISPACES_BASE . '/space/api/?wsdl');
-  $spaceApi = $WSDL->getProxy();
-  $WSDL = new SOAP_WSDL($WIKISPACES_BASE . '/user/api/?wsdl');
-  $userApi = $WSDL->getProxy();
-  $WSDL = new SOAP_WSDL($WIKISPACES_BASE . '/page/api/?wsdl');
-  $pageApi = $WSDL->getProxy();
-  $pageApi->setOpt('timeout', 30);
- } else {
-  $siteApi = new SoapClient($WIKISPACES_BASE . '/site/api/?wsdl');
-  $spaceApi = new SoapClient($WIKISPACES_BASE . '/space/api/?wsdl');
-  $userApi = new SoapClient($WIKISPACES_BASE . '/user/api/?wsdl');
-  //$pageApi = new SoapClient($WIKISPACES_BASE . '/page/api/?wsdl');
- }
+// we depend on the php5 soap extension --enable-soap
+$siteApi = new SoapClient($WIKISPACES_BASE . '/site/api/?wsdl');
+$spaceApi = new SoapClient($WIKISPACES_BASE . '/space/api/?wsdl');
+$userApi = new SoapClient($WIKISPACES_BASE . '/user/api/?wsdl');
+$pageApi = new SoapClient($WIKISPACES_BASE . '/page/api/?wsdl');
 
 function getSession() {
 	global $siteApi;
@@ -176,8 +161,12 @@ function spaceExists($space_names) {
 	
 	$exists = array();
 	foreach ($space_names as $space_name) {
-		$space = $spaceApi->getSpace($session, $space_name);
-		$exists[$space_name] = ($space->id) ? true : false;
+                try {
+                    $space = $spaceApi->getSpace($session, $space_name);
+                    $exists[$space_name] = true;
+                } catch (Exception $e) {
+                    $exists[$space_name] = false;
+                }
 	}	
 	return $exists;
 }
@@ -195,12 +184,15 @@ function isMemberOrOrganizer($space_name, $username) {
 
 	$session = $siteApi->login($admin_name, $admin_password);
 	
-	$space = $spaceApi->getSpace($session, $space_name);
-	if (!$space->id) {
+	try {
+		$space = $spaceApi->getSpace($session, $space_name);
+	} catch (Exception $e) {	
 		return false;
 	}
-	$user = $userApi->getUser($session, $username);
-	if (!$user->id) {
+	try { 
+	    $user = $userApi->getUser($session, $username);
+	}
+	catch (Exception $e) {
 		return false;
 	}
 	// return true if this user is a member or an organizer of this space

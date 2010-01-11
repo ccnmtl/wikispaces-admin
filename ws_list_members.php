@@ -16,9 +16,9 @@ $space_name = $_REQUEST['space_name'];
 //print $space_name;
 // print $session;
 
-$space = $spaceApi->getSpace($session, $space_name);
-
-if (!$space->id) {
+try {
+    $space = $spaceApi->getSpace($session, $space_name);
+} catch (Exception $e) {
 	print '{ "results" : ["Sorry, we could not find the wiki you specified."], "created" : "'.$space_name .'"}';
 	exit;
 }

@@ -38,8 +38,9 @@ if (!in_array($space_name, $my_instructor_courses)) {
 }
 
 // check to see if space already exists
-$space = $spaceApi->getSpace($session, $space_name);
-if ($space->id) {
+try {
+    $space = $spaceApi->getSpace($session, $space_name);
+} catch (Exception $e) {
 	print '{ "results" : "This wiki already exists at <a href=\"'.$url.'\">'.$url.'</a>.", 
 		 "created" : "false" }';
 	exit;
@@ -49,11 +50,11 @@ if ($space->id) {
 $space = $spaceApi->createSpace($session, $space_name, "private");
 
 // check if the user exists
-$user = $userApi->getUser($session, $REMOTE_USER);
-
-// they don't exist - create a new user w/in wikispaces
-if (!$user->id) {
-	$user = $userApi->createUser($session, $REMOTE_USER, $NEW_USER_PASSWORD, $USER_EMAIL);
+try {
+    $user = $userApi->getUser($session, $REMOTE_USER);
+} catch (Exception $e) {
+    // they don't exist - create a new user w/in wikispaces
+    $user = $userApi->createUser($session, $REMOTE_USER, $NEW_USER_PASSWORD, $USER_EMAIL);
 }
 
 // add the faculty member as an organizer

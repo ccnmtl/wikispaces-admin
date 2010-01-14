@@ -38,12 +38,17 @@ if (!in_array($space_name, $my_instructor_courses)) {
 }
 
 // check to see if space already exists
+$exists = false;
 try {
     $space = $spaceApi->getSpace($session, $space_name);
+    $exists = true;
 } catch (Exception $e) {
-	print '{ "results" : "This wiki already exists at <a href=\"'.$url.'\">'.$url.'</a>.", 
+    $exists = false;
+} 
+if ($exists) {
+   print '{ "results" : "This wiki already exists at <a href=\"'.$url.'\">'.$url.'</a>.", 
 		 "created" : "false" }';
-	exit;
+   exit;
 }
 
 // create new space if it doesn't

@@ -36,8 +36,9 @@ function getMyCourses() {
 	$uni = $_SERVER['REMOTE_USER'];
 
 	if ($uni == 'jb2410' || $uni == 'dbeeby') { 
-	   $affils[] = 'CUcourse_MRKTB8619_001_2009_3';
-	   $affils[] = 'CUcourse_A&HY5010_002_2009_1';
+	   $affils[] = 'CUcourse_MRKTB8619_001_2010_3';
+	   $affils[] = 'CUcourse_A&HY5010_002_2010_1';
+	   $affils[] = 'CUcourse_LAW_9999_002_2010_1';
 	}
 
 	$my_courses = array_filter($affils, isCourse);
@@ -67,7 +68,8 @@ function getMyInstructorCourses() {
 	$USER_AFFILIATIONS = $_SERVER['USER_AFFILIATIONS']; 
 	$affils = explode(" ", $USER_AFFILIATIONS);
 	// for testing
-	//$affils[] = "CUinstr_COLLF2010_001_2006_1";
+	$affils[] = "CUinstr_COLLF2010_001_2010_1";
+	$affils[] = "CUinstr_LAW_F2010_001_2010_1";
 
 	$my_instr_courses = array_filter($affils, isInstructor);
 	$my_instr_courses = array_filter($my_instr_courses, isCurrent);
@@ -105,9 +107,13 @@ function isCurrent($affil) {
 	$now = getdate();
 	// for testing purposes, manually set this to 2006
 	$now_year = $now['year'];
-	// $now_year = '2006'; 
-	$affil_parts = explode('_', $affil);
-	$affil_year = $affil_parts[3];
+	// $now_year = '2006';
+	// -- CAREFUL - splitting on '_' no longer works with the new affil format
+	//$affil_parts = explode('_', $affil);
+	//$affil_year = $affil_parts[-2];
+
+	// pluck out the year by index instead 
+	$affil_year = substr($affil, -6, 4);
 	return ($affil_year >= $now_year) ? true : false;
 }
 
@@ -141,6 +147,14 @@ function affil2space($affil) {
 // returns the cannonical version of a course name given the nra coursekey format
 // e.g. - COLLF2010_001_2006_1 -> collf2010_001_2006_1
 function coursekey2space($course) {
+	// 2010 course affill format update:
+	// test to see if we have  an extra '_' in the dept string (the 4th character) for padding
+	// remove this '_' so we have prettier (and backwards compatible) urls
+	$pos = strpos($course, "_");
+	if ($pos == 3) {
+		$course = substr_replace($course, "", 3, 1);	
+	}
+
 	$tmp = str_replace("_", "-", $course);
 
 	// special case to handle TC's '&' in the course string - e.g. A&H

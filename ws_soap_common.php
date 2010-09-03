@@ -59,6 +59,7 @@ function getMyCourses() {
 	   $my_courses[] = 'www';
 	   $my_courses[] = 'ccnmtl';
 	   $my_courses[] = 'jonah-sandbox';
+	   $my_courses[] = 'jonah-playground01142010';
 	}
 
 	return $my_courses;	
@@ -68,8 +69,8 @@ function getMyInstructorCourses() {
 	$USER_AFFILIATIONS = $_SERVER['USER_AFFILIATIONS']; 
 	$affils = explode(" ", $USER_AFFILIATIONS);
 	// for testing
-	$affils[] = "CUinstr_COLLF2010_001_2010_1";
-	$affils[] = "CUinstr_LAW_F2010_001_2010_1";
+	// $affils[] = "CUinstr_COLLF2010_001_2010_1";
+	// $affils[] = "CUinstr_LAW_F2010_001_2010_1";
 
 	$my_instr_courses = array_filter($affils, isInstructor);
 	$my_instr_courses = array_filter($my_instr_courses, isCurrent);
@@ -85,7 +86,7 @@ function getMyInstructorCourses() {
 		$my_instr_courses[] = 'ccnmtl';	
 		$my_instr_courses[] = 'jonah-playground3';
 		$my_instr_courses[] = 'jonah-playground4';
-		$my_instr_courses[] = 'jonah-playground7';
+		$my_instr_courses[] = 'jonah-playground070710a';
 }
 	return $my_instr_courses;	
 }

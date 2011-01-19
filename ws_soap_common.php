@@ -71,6 +71,7 @@ function getMyInstructorCourses() {
 	// for testing
 	// $affils[] = "CUinstr_COLLF2010_001_2010_1";
 	// $affils[] = "CUinstr_LAW_F2010_001_2010_1";
+	$affils[] = "CUinstr_RUSSS1202_001_2010_2";
 
 	$my_instr_courses = array_filter($affils, isInstructor);
 	$my_instr_courses = array_filter($my_instr_courses, isCurrent);
@@ -222,7 +223,7 @@ function getNRACoursesByUni() {
 	global $NRA_FILE;
 	$uni = $_SERVER['REMOTE_USER'];
 
-	$cmd = "grep $uni $NRA_FILE";
+	$cmd = "grep '$uni,' $NRA_FILE";
 	//print $cmd;
 	// put each line into an array
 	$output = explode("\n", shell_exec($cmd));

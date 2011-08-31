@@ -22,6 +22,8 @@ $session = $siteApi->login($admin_name, $admin_password);
 $space_name = $_REQUEST['space_name'];
 $url = "http://${space_name}.wikispaces.columbia.edu";
 
+$templateSpaceId = $_REQUEST['templateSpaceId'];
+
 //print $space_name;
 // print $session;
 
@@ -51,8 +53,13 @@ if ($exists) {
    exit;
 }
 
-// create new space if it doesn't
-$space = $spaceApi->createSpace($session, $space_name, "private");
+// create new space if it doesn't.  
+// Check to see if a template space was passed in.
+if ($templateSpaceId) { 
+ $space = $spaceApi->createSpaceFromTemplate($session, $space_name, "private", (int)$templateSpaceId);
+} else {
+ $space = $spaceApi->createSpace($session, $space_name, "private");
+}
 
 // check if the user exists
 try {
@@ -69,7 +76,8 @@ $added = $spaceApi->addOrganizer($session, $space->id, $user->id);
 
 
 if ($added) {
-	print '{ "results" : "This wiki has been created. Please visit <a href=\"'.$url.'\">'.$url.'</a> to login.",
+	//print '{ "results" : "This wiki has been created. Please visit <a href=\"'.$url.'\">'.$url.'</a> to login.",
+	print '{ "results" : "This wiki has been created (using template '. $templateId .'). Please visit <a href=\"'.$url.'\">'.$url.'</a> to login.",
 		 "created" : "'. $space_name .'" }';
 } else {
 	print '{ "results" : "Sorry, there was an error creating' . $space->name . '. Pleace contact ' . $CONTACT_EMAIL . ' for more assistance.",

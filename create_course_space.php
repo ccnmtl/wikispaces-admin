@@ -81,8 +81,12 @@ $exists = spaceExists($my_instructor_courses);
 			<?php } else { ?>
 	        	        <td><div id="<?php echo $course ?>-action">
 					 <form action="./ws_createspace.php" method="GET" name="createspace" id="createspace"> 
-					<input type="hidden" name="space_name" value="<?php echo $course ?>">
-					<input type="submit" class="submitbutton" value="Create">
+					     Wiki Template: <select id="templateSpaceId" name="templateSpaceId">
+					     <option value="" label="default">default</option>
+					     <option value="1124" label="CMS Template">CMS Template</option>
+					   </select>  
+					   <input type="hidden" name="space_name" value="<?php echo $course ?>">
+					   <input type="submit" class="submitbutton" value="Create">
 					</form>
 				    </div>
 				</td>

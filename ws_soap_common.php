@@ -54,12 +54,13 @@ function getMyCourses() {
 	$my_courses = array_merge($my_courses, $nra_courses);
 
         usort($my_courses, "cmp_semester");
-
-	if ($uni == 'jb2410' || $uni == 'dbeeby') { 
+	
+	if ($uni == 'jb2410' || $uni == 'dbeeby' || $uni == 'jonah@ccnmtl.columbia.edu') { 
 	   $my_courses[] = 'www';
 	   $my_courses[] = 'ccnmtl';
 	   $my_courses[] = 'jonah-sandbox';
-	   $my_courses[] = 'jonah-playground01142010';
+	   $my_courses[] = 'jonah-playground3';
+	   $my_courses[] = 'jonah-playground4';
 	}
 
 	return $my_courses;	
@@ -82,12 +83,12 @@ function getMyInstructorCourses() {
 
 	// just for debugging
 	$uni = $_SERVER['REMOTE_USER'];
-	if ($uni == 'jb2410' || $uni == 'dbeeby') { 
+	if ($uni == 'jb2410' || $uni == 'dbeeby' || $uni == 'jonah_ccnmtl_columbia_edu') { 
 		$my_instr_courses[] = 'www';
 		$my_instr_courses[] = 'ccnmtl';	
 		$my_instr_courses[] = 'jonah-playground3';
 		$my_instr_courses[] = 'jonah-playground4';
-		$my_instr_courses[] = 'jonah-playground070710a';
+		$my_instr_courses[] = 'jonah-playground083111l';
 }
 	return $my_instr_courses;	
 }
@@ -212,8 +213,10 @@ function isMemberOrOrganizer($space_name, $username) {
 		return false;
 	}
 	// return true if this user is a member or an organizer of this space
-	return ($spaceApi->isMember($session, $space->id, $user->id) || 
-		$spaceApi->isOrganizer($session, $space->id, $user->id));
+	
+	# this will return true if they are a member or organizer
+        return ($spaceApi->isMember($session, $space->id, $user->id));	
+
 
 }
 
